@@ -1,3 +1,4 @@
+/* eslint-disable */
 // 来源https://github.com/junruchen/junruchen.github.io/edit/master/tool/client/client.js
 
 /**
