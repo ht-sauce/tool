@@ -1,29 +1,6 @@
 /* eslint-disable */
-// 来源https://github.com/junruchen/junruchen.github.io/edit/master/tool/client/client.js
-
-/**
- * 判断当前引擎、浏览器、平台
- *
- * 均存在指定变量中，除了当前使用的被保存了浮点数形式的版本号，其他属性值将保持为0
- *
- * ----------引擎判断 engine---------
- * - Opera
- * 检测window.opera，Opera5以及更高版本都存在该对象，version()记录Opera的版本号
- * - WebKit
- * 由于webkit的用户代理字符串中包含'Gecko'和'KHTML'子字符串，所以先检测webkit再检测gecko和khtml
- * 通过检测用户代理字符串中'AppleWebkit'来确定是否是webkit引擎
- * - KHTML
- * 由于khtml的用户代理字符串中也包含'Gecko'子字符串，所以先检测khtml再检测gecko
- * - Gecko
- * Gecko的版本号不会出现在字符串'Gecko'后面，而是位于字符串'rv:'与一个闭括号之间，且还需判断'Gecko/'后是否跟8个数字
- * - IE
- * IE的版本号位于字符串'MSIE'的后面，一个分号的前面
- *
- * ----------浏览器判断 browser---------
- * - 对于IE、Opera来说，browser中的值等于engine对象中的值
- * - 对于Konqueror来说，browser.konq = engine.khtml，browser.ver = engine.ver
- *
- * */
+//浏览器判断 browser
+//引擎判断 engine
 export default function () {
   // 保存引擎以及具体的版本号
   const engine = {
@@ -73,15 +50,15 @@ export default function () {
     engine.opera = browser.opera = parseFloat(engine.ver)
   } else if (/AppleWebkit\/(\S+)/.test(ua)) {
     // webkit
-    engine.ver = RegExp[$1]
+    engine.ver = RegExp['$1']
     engine.webkit = parseFloat(engine.ver)
 
     // 确定是Chrome还是Safari
     if (/Chrome\/(\S+)/.test(ua)) {
-      browser.ver = RegExp[$1]
+      browser.ver = RegExp['$1']
       browser.chrome = parseFloat(browser.ver)
     } else if (/Version\/(\S+)/.test(ua)) {
-      browser.ver = RegExp[$1]
+      browser.ver = RegExp['$1']
       browser.safari = parseFloat(browser.ver)
     } else {
       // 近似确定版本号
@@ -99,21 +76,21 @@ export default function () {
     }
   } else if (/KHTML\/(\S+)/.test(ua)) {
     // khtml
-    engine.ver = browser.ver = RegExp[$1]
+    engine.ver = browser.ver = RegExp['$1']
     engine.khtml = browser.konq = parseFloat(engine.ver)
   } else if (/rv:([^\)]+)\) Gecko\/\d{8}/.test(ua)) {
     // opera
-    engine.ver = RegExp[$1]
+    engine.ver = RegExp['$1']
     engine.gecko = parseFloat(engine.ver)
 
     // 确定是不是Firefox
     if (/Firefox\/(\S+)/.test(ua)) {
-      browser.ver = RegExp[$1]
+      browser.ver = RegExp['$1']
       browser.firefox = parseFloat(browser.ver)
     }
   } else if (/MSIE ([^;]+)/.test(ua)) {
     // ie
-    engine.ver = browser.ver = RegExp[$1]
+    engine.ver = browser.ver = RegExp['$1']
     engine.ie = browser.ie = parseFloat(engine.ver)
   }
 
@@ -174,8 +151,8 @@ export default function () {
     }
   }
 
-  if (/Android (\d+.\d+)/.test(ua)) {
-    system.android = parseFloat(RegExp.$1)
+  if (/Android/.test(ua)) {
+    system.android = true
   }
 
   // 游戏设备

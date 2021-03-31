@@ -13,12 +13,18 @@ export function JudgmentPlatform() {
   return 'pc'
 }
 
-function defineRem(p) {
-  const html = document.getElementsByTagName('html')[0]
-  // 平板拆分为1024份
-  if (p === 'ipad') html.style.fontSize = `calc(100vw / 1024)`
-  // 手机拆分为750
-  if (p === 'mobile') html.style.fontSize = `calc(100vw / 750)`
+// 动态横屏
+function hs(p) {
+  /*####平板
+  设计图比值
+  1240：0.08065vw
+  1024: 0.09765625vw
+  100vw / 1024 强制横屏，平板暂时仅支持横屏模式
+  ####手机
+  750: 0.1333vw
+  375: 0.2667vw
+  ####pc
+  使用px*/
   // 平板强制横屏
   const HorizontalScreen = () => {
     const app = document.getElementById('app')
@@ -35,7 +41,6 @@ function defineRem(p) {
 
       app.style.transform = 'rotate(90deg)'
       app.style.transformOrigin = '50% 50%'
-      html.style.fontSize = `calc(100vh / 1024)`
     } else {
       // 横屏的时候复原
       app.style.width = width + 'px'
@@ -45,7 +50,6 @@ function defineRem(p) {
       app.style.transition = 'rotate(0deg)'
       app.style.transform = 'none'
       app.style.transformOrigin = '50% 50%'
-      html.style.fontSize = `calc(100vw / 1024)`
     }
   }
   HorizontalScreen()
@@ -71,7 +75,6 @@ export function usePlatform() {
   const vt = orientation()
 
   const p = platform[type]
-  defineRem(p)
 
   return {
     orientation: vt, // 横竖屏
