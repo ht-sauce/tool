@@ -1,0 +1,16 @@
+{
+  "name": "tool",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "repository": {},
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ht-sauce/tool/issues"
+  },
+  "homepage": "https://github.com/ht-sauce/tool#readme",
+  "dependencies": {
+    "qrcode": "^1.4.4"
+  }
+}
