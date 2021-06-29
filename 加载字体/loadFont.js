@@ -1,17 +1,20 @@
 //加载字体文件
-
+// 字体名称需要转unicode码否则在canvas等情况下字体展示不正确
 class LoadFontList {
   // 开始加载字体
   async load() {
     try {
       const fontList = [
-        this.loadFont({ cssValue: 'SY-Bold', url: '/nbs-pc/comfonts/SourceHanSansCN-Bold.otf' }),
         this.loadFont({
-          cssValue: 'SY-Regular',
+          cssValue: '\u0053\u0059\u002d\u0042\u006f\u006c\u0064', // SY-Bold
+          url: '/nbs-pc/comfonts/SourceHanSansCN-Bold.otf',
+        }),
+        this.loadFont({
+          cssValue: '\u0053\u0059\u002d\u0052\u0065\u0067\u0075\u006c\u0061\u0072', // SY-Regular
           url: '/nbs-pc/comfonts/SourceHanSansCN-Regular.ttf',
         }),
         this.loadFont({
-          cssValue: 'SY-Heavy',
+          cssValue: '\u0053\u0059\u002d\u0048\u0065\u0061\u0076\u0079', // SY-Heavy
           url: '/nbs-pc/comfonts/SourceHanSerifCN-Heavy-4.otf',
         }),
       ]
