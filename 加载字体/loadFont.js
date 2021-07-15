@@ -6,15 +6,15 @@ class LoadFontList {
     try {
       const fontList = [
         this.loadFont({
-          cssValue: '\u0053\u0059\u002d\u0042\u006f\u006c\u0064', // SY-Bold
+          cssValue: 'SY-Bold', // SY-Bold
           url: '/nbs-pc/comfonts/SourceHanSansCN-Bold.otf',
         }),
         this.loadFont({
-          cssValue: '\u0053\u0059\u002d\u0052\u0065\u0067\u0075\u006c\u0061\u0072', // SY-Regular
+          cssValue: 'SY-Regular', // SY-Regular
           url: '/nbs-pc/comfonts/SourceHanSansCN-Regular.ttf',
         }),
         this.loadFont({
-          cssValue: '\u0053\u0059\u002d\u0048\u0065\u0061\u0076\u0079', // SY-Heavy
+          cssValue: 'SY-Heavy', // SY-Heavy
           url: '/nbs-pc/comfonts/SourceHanSerifCN-Heavy-4.otf',
         }),
       ]
@@ -29,7 +29,7 @@ class LoadFontList {
     }
   }
   // obj格式,cssValue为自定义字体的名字,url为自定义字体的文件路径
-  loadFont(obj = { cssValue: 'SY-Bold', url: '/comfonts/SourceHanSansCN-Regular.ttf' }) {
+  loadFont(obj = { cssValue: null, url: null }) {
     if (document.fonts && !this.checkFont(obj.cssValue)) {
       let fontFace = new FontFace(
         obj.cssValue,
