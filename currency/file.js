@@ -27,3 +27,18 @@ export function HomologyDownload(url, name) {
   a.click()
   a = null
 }
+
+// 文件下载
+export const fileDownload = (response) => {
+  if (!response) return null
+  const filename = response.headers['content-disposition']
+  const blob = response.data
+  const downloadElement = document.createElement('a')
+  const href = window.URL.createObjectURL(blob)
+  downloadElement.href = href
+  downloadElement.download = decodeURIComponent(filename.split("filename*=utf-8''")[1])
+  document.body.appendChild(downloadElement)
+  downloadElement.click()
+  document.body.removeChild(downloadElement)
+  window.URL.revokeObjectURL(href)
+}
