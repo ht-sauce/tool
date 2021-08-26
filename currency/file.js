@@ -87,7 +87,7 @@ export const filesChecks = {
    * */
   type(files, type = ['image/jpeg', 'image/png']) {
     for (let i = 0; i < files.len; i++) {
-      if (type.length > 0 && !type.includes(files[i].type)) return false
+      if (type.length < 1 || !type.includes(files[i].type)) return false
     }
     return true
   },
