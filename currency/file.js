@@ -28,7 +28,7 @@ export function HomologyDownload(url, name) {
   a = null
 }
 
-// 文件下载
+// 文件下载需要是blob类型
 export const fileDownload = (response) => {
   if (!response) return null
   const filename = response.headers['content-disposition']
@@ -41,4 +41,50 @@ export const fileDownload = (response) => {
   downloadElement.click()
   document.body.removeChild(downloadElement)
   window.URL.revokeObjectURL(href)
+}
+
+// 选择文件
+export function selectFile({ options = false } = {}) {
+  return new Promise((resolve) => {
+    let input = document.createElement('input')
+    input.type = 'file'
+    options.multiple ? (input.multiple = 'multiple') : ''
+    input.click()
+
+    const remove = () => {
+      input.removeEventListener('input', watchUpload, false)
+      input = null
+    }
+
+    const watchUpload = (e) => {
+      const file = e.path[0].files
+      remove()
+      resolve(file)
+    }
+    input.addEventListener('input', watchUpload, false)
+  })
+}
+// 文件基础校验类
+export const filesChecks = {
+  // 文件数量限制
+  len(files, max) {
+    const len = files.length
+    if (len > max) {
+      return false
+    } else return true
+  },
+  // 文件大小限制,按Mb计算
+  size(files, size) {
+    for (let i = 0; i < files.len; i++) {
+      if (size !== 0 && files[i].size / 1024 / 1024 > size) return false
+    }
+    return true
+  },
+  // 文件类型限制
+  type(files, type = ['image/jpeg', 'image/png']) {
+    for (let i = 0; i < files.len; i++) {
+      if (type.length > 0 && !type.includes(files[i].type)) return false
+    }
+    return true
+  },
 }
