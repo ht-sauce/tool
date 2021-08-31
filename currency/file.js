@@ -75,7 +75,7 @@ export const filesChecks = {
   },
   // 文件大小限制,按Mb计算
   size(files, size) {
-    for (let i = 0; i < files.len; i++) {
+    for (let i = 0; i < files.length; i++) {
       if (size === 0 || files[i].size / 1024 / 1024 > size) return false
     }
     return true
@@ -86,7 +86,7 @@ export const filesChecks = {
    * execl: xls:'application/vnd.ms-excel',xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
    * */
   type(files, type = ['image/jpeg', 'image/png']) {
-    for (let i = 0; i < files.len; i++) {
+    for (let i = 0; i < files.length; i++) {
       if (type.length < 1 || !type.includes(files[i].type)) return false
     }
     return true
