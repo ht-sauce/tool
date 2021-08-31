@@ -44,10 +44,11 @@ export const fileDownload = (response) => {
 }
 
 // 选择文件
-export function selectFile({ options = false } = {}) {
+export function selectFile({ options = false, accept = [] } = {}) {
   return new Promise((resolve) => {
     let input = document.createElement('input')
     input.type = 'file'
+    input.accept = accept.toString()
     options.multiple ? (input.multiple = 'multiple') : ''
     input.click()
 
