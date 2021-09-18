@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ElLoading } from 'element-plus'
+import { Loading } from 'element-ui'
 
 // axios函数封装
 const ajax = ({
@@ -15,7 +15,7 @@ const ajax = ({
   // 接口全局加载提示
   let loadingInstance = ''
   if (loading !== false) {
-    loadingInstance = ElLoading.service({
+    loadingInstance = Loading.service({
       lock: true,
       text: loading !== true ? loading : '加载中……',
       spinner: 'el-icon-loading',

@@ -34,15 +34,35 @@ const handlerData = (opt, apiBase = {}) => {
   // opt.responseType = opt.responseType ?? (opt.mock ? 'json' : 'text') // 细节需要加括号,上环境情况下后端返回的数据是base64字符串
   opt.responseType = opt.responseType ?? 'json'
   opt.isResponse = opt.isResponse ?? false // 是否直接获取response数据，避免因为简化data数据获取导致无法获取完整数据情况
-  opt.test = opt.test ?? false // 测试默认返回正确
+  opt.reLogin = opt.reLogin ?? true // 是否判断401状态跳转到登录页面
 
   return opt
+}
+// 错误信息
+const handlerErrorMessage = (error, message, tipsCode) => {
+  error &&
+    Tips.error({ msg: error !== true ? error : message ?? '系统异常，请稍后重试！', tipsCode })
+}
+// 成功信息
+const handlerSuccessMessage = (success, message, tipsCode = '') => {
+  success &&
+    Tips.success({
+      msg: success !== true ? success : message ?? '成功',
+      tipsCode,
+    })
 }
 
 // 业务接口
 async function BaseApi(
   opt = {},
-  { prefix = '', codeField = 'success', dataField = 'data', codeNum = true, msgField = 'message' },
+  {
+    prefix = '',
+    codeField = 'success',
+    dataField = 'data',
+    codeNum = true,
+    msgField = 'message',
+    tipsCode = 'errorCode',
+  },
 ) {
   opt = handlerData(opt, { prefix }) // 参数预处理
 
@@ -59,14 +79,12 @@ async function BaseApi(
   }
 
   try {
-    if (opt.test) return Promise.resolve({}) // 测试模式默认正确返回
-
     const result = await ajax(opt) // 请求接口
 
     if (result.headers['authorization']) {
       vuex.commit('user/SET_TOKEN', result.headers['authorization'])
     }
-    if (result.status === 401) {
+    if (opt.reLogin && result.status === 401) {
       signOut()
       return Promise.reject(result)
     }
@@ -83,17 +101,14 @@ async function BaseApi(
         const code = response[codeField]
         const data = response[dataField]
         const message = response[msgField]
-
+        const errCode = response[tipsCode]
         if (code === codeNum) {
           // 提前处理正确错误
-          success &&
-            Tips.success({
-              msg: success !== true ? success : message ?? '成功',
-            })
+          handlerSuccessMessage(success, message)
 
           return Promise.resolve(opt.isResponse ? response : data)
         } else {
-          error && Tips.error({ msg: error !== true ? error : message ?? '系统异常，请稍后重试！' })
+          handlerErrorMessage(error, message, errCode)
 
           return Promise.reject(response)
         }
@@ -105,10 +120,12 @@ async function BaseApi(
     }
   } catch (e) {
     const response = e.response
-    if (response.status === 401) signOut()
+    if (opt.reLogin && response?.status === 401) signOut()
     else {
-      const message = response.data[msgField]
-      error && Tips.error({ msg: error !== true ? error : message ?? '系统异常，请稍后重试！' })
+      const resData = response?.data ?? {}
+      const message = resData[msgField]
+      const errCode = resData[tipsCode]
+      handlerErrorMessage(error, message, errCode)
     }
 
     return Promise.reject(e)
