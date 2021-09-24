@@ -25,18 +25,19 @@ const ajax = async ({
       background: 'rgba(0, 0, 0, 0.5)',
     })
   }
-  if (jsonp) {
-    return await jsonpAjax({
-      url,
-      baseURL,
-      data,
-      timeout,
-      jsonpOpt,
-    })
-  } else {
+  try {
     const posts = ['put', 'post', 'patch'] // 使用data作为发送数据主体
-    try {
-      const response = await axios({
+    let response = null
+    if (jsonp) {
+      response = await jsonpAjax({
+        url,
+        baseURL,
+        data,
+        timeout,
+        jsonpOpt,
+      })
+    } else {
+      response = await axios({
         url: url,
         baseURL: baseURL,
         headers: headers,
@@ -45,12 +46,13 @@ const ajax = async ({
         timeout: timeout,
         responseType,
       })
-      loadingInstance && loadingInstance.close()
-      return Promise.resolve(response)
-    } catch (e) {
-      loadingInstance && loadingInstance.close()
-      return Promise.reject(e)
     }
+
+    loadingInstance && loadingInstance.close()
+    return Promise.resolve(response)
+  } catch (e) {
+    loadingInstance && loadingInstance.close()
+    return Promise.reject(e)
   }
 }
 
