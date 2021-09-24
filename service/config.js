@@ -21,8 +21,6 @@ switch (process.env.VUE_APP_NODE_ENV) {
   case 'rapmock': {
     service = {
       ...service,
-      domainName: '',
-      nbs: '/app/mock/283382',
     }
     break
   }

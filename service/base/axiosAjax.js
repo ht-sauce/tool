@@ -1,8 +1,9 @@
 import axios from 'axios'
+import jsonpAjax from './jsonpAjax'
 import { Loading } from 'element-ui'
 
 // axios函数封装
-const ajax = ({
+const ajax = async ({
   url = '',
   loading = false, // 加载拦截
   baseURL = '',
@@ -11,6 +12,8 @@ const ajax = ({
   method = 'get',
   timeout = 30 * 1000,
   responseType = 'json', // 表示服务器响应的数据类型，可以是 'arraybuffer', 'blob', 'document', 'json', 'text', 'stream'
+  jsonp = false, //是否使用jsonp请求接口
+  jsonpOpt = {}, // jsonp库的options参数
 }) => {
   // 接口全局加载提示
   let loadingInstance = ''
@@ -22,30 +25,33 @@ const ajax = ({
       background: 'rgba(0, 0, 0, 0.5)',
     })
   }
-
-  const posts = ['put', 'post', 'patch'] // 使用data作为发送数据主体
-
-  return new Promise((suc, err) => {
-    // 预处理数据部分
-    method = method.toLocaleLowerCase() // 转化为小写
-    axios({
-      url: url,
-      baseURL: baseURL,
-      headers: headers,
-      method: method,
-      [posts.includes(method) ? 'data' : 'params']: data,
-      timeout: timeout,
-      responseType,
+  if (jsonp) {
+    return await jsonpAjax({
+      url,
+      baseURL,
+      data,
+      timeout,
+      jsonpOpt,
     })
-      .then((response) => {
-        loadingInstance && loadingInstance.close()
-        suc(response)
+  } else {
+    const posts = ['put', 'post', 'patch'] // 使用data作为发送数据主体
+    try {
+      const response = await axios({
+        url: url,
+        baseURL: baseURL,
+        headers: headers,
+        method: method,
+        [posts.includes(method) ? 'data' : 'params']: data,
+        timeout: timeout,
+        responseType,
       })
-      .catch((e) => {
-        loadingInstance && loadingInstance.close()
-        err(e)
-      })
-  })
+      loadingInstance && loadingInstance.close()
+      return Promise.resolve(response)
+    } catch (e) {
+      loadingInstance && loadingInstance.close()
+      return Promise.reject(e)
+    }
+  }
 }
 
 export { ajax }

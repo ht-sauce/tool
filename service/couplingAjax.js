@@ -1,4 +1,4 @@
-import { ajax } from '@/services/base/axiosAjax'
+import { ajax } from './base/axiosAjax'
 import config from './config'
 import Tips from './base/tips'
 
@@ -23,7 +23,7 @@ const signOut = antiShake(() => {
 // 处理opt传入参数
 const handlerData = (opt, apiBase = {}) => {
   const { prefix } = apiBase
-  opt.baseURL = config.domainName
+  opt.baseURL = opt.baseURL ? opt.baseURL : config.domainName
   opt.url = prefix + opt.url
 
   opt.headers = opt.headers ?? { 'Content-Type': 'application/json' } // 设置默认headers
