@@ -8,6 +8,7 @@ const ajax = async ({
   loading = false, // 加载拦截
   baseURL = '',
   data = {},
+  params = {}, // 地址栏拼接数据，仅限于'put', 'post', 'patch'
   headers = { 'Content-Type': 'application/json;charset=UTF-8' }, // 头部信息处理
   method = 'get',
   timeout = 30 * 1000,
@@ -42,7 +43,8 @@ const ajax = async ({
         baseURL: baseURL,
         headers: headers,
         method: method,
-        [posts.includes(method) ? 'data' : 'params']: data,
+        params,
+        [posts.includes(method.toLowerCase()) ? 'data' : 'params']: data,
         timeout: timeout,
         responseType,
       })
