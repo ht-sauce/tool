@@ -1,0 +1,89 @@
+// 1、实心三角形
+div {
+  width: 0;
+  height: 0;
+  border-width: 0 40px 40px;
+  border-style: solid;
+  border-color: transparent transparent red;
+}
+// 2、箭头三角形
+div {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid #999;
+  order-right: 1px solid #999;
+}
+// 3、三角形阴影
+
+div {
+  position: absolute;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  content: '';
+  border-style: solid;
+  border-width: 20px;
+  border-color: #fff #fff transparent transparent;
+  transform: rotate(135deg);
+  box-shadow: 6px -6px 6px red;
+}
+// 4、内阴影三角形
+.ceshi {
+  width: 200px;
+  height: 200px;
+  box-shadow: 0 0 6px #fff inset;
+  border-radius: 10px;
+  position: relative;
+  &::after {
+    position: absolute;
+    top: -10px;
+    right: 40px;
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: transparent transparent #fff #fff;
+    transform: rotate(135deg);
+    box-shadow: 3px -3px 3px red inset;
+  }
+}
+// 5、斜角三角形，内阴影，气泡框
+// 第一种写法
+.ceshi {
+  width: 82px;
+  height: 30px;
+  /*border-right: 8px solid #65a7ef;*/
+  /*border-bottom: 4.5px solid #65a7ef;*/
+  transform: rotate(-145deg) skew(51deg);
+  box-shadow: #fff 0 0 6px inset;
+  &::after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 30px 82px 0 0;
+    border-color: #000 transparent transparent transparent;
+  }
+}
+// 第二种写法
+.ceshi {
+  width: 82px;
+  height: 30px;
+  /*border-right: 8px solid #65a7ef;*/
+  /*border-bottom: 4.5px solid #65a7ef;*/
+  transform: rotate(-145deg) skew(51deg);
+  box-shadow: #fff 0 0 6px inset;
+  &::after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 30px 82px 0 0;
+    border-color: #000 transparent transparent transparent;
+  }
+}
+
