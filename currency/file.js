@@ -93,3 +93,19 @@ export const filesChecks = {
     return true
   },
 }
+
+// 跨域下载图片
+export function noCorsImgDownload(imgUrl, imgName) {
+  const x = new XMLHttpRequest()
+  //禁止浏览器缓存；否则会报跨域的错误
+  x.open('GET', imgUrl + '?t=' + new Date().getTime(), true)
+  x.responseType = 'blob'
+  x.onload = function (e) {
+    const url = window.URL.createObjectURL(x.response)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = imgName
+    a.click()
+  }
+  x.send()
+}
