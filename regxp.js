@@ -1,7 +1,7 @@
 // 正则表达式收集
 
 // 验证网址开头的字符
-export const isExternal = str => /^(https:\/\/|mailto:|tel:|http:\/\/)/.test(str)
+export const isExternal = (str) => /^(https:\/\/|mailto:|tel:|http:\/\/)/.test(str)
 // 数字或者零
 export const zeroOrNumber = (value) => /^([0-9]*)$/.test(value)
 // 验证手机号

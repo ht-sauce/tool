@@ -74,6 +74,51 @@ export const filesChecks = {
       return false
     } else return true
   },
+  // 图片地址和是否本地图片
+  async getImgSize(url, isLocal = true) {
+    if (!url) return Promise.reject('图片地址不能为空')
+    const image = new Image()
+
+    if (isLocal) image.src = await this.getLocalImgUrl(url)
+    else image.src = url
+
+    return new Promise((resolve, reject) => {
+      image.onload = () => {
+        resolve({
+          width: image.width,
+          height: image.height,
+        })
+      }
+      image.onerror = (imgEvent) => {
+        reject(imgEvent)
+      }
+    })
+  },
+  // 获取本地图片url地址
+  getLocalImgUrl(localFile) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        resolve(event.target.result)
+      }
+      reader.onerror = (e) => {
+        reject(e)
+      }
+      reader.readAsDataURL(localFile)
+    })
+  },
+  // 图片像素校验,这是一个promise函数
+  async imgPx({ files = [], width = 375, height = 375, isLocal = true }) {
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const imgWh = await this.getImgSize(files[i], isLocal)
+        if (imgWh.width < width || imgWh.height < height) return Promise.reject(false)
+      }
+      return Promise.resolve(true)
+    } catch (e) {
+      return Promise.reject(e)
+    }
+  },
   // 文件大小限制,按Mb计算
   size(files, size) {
     for (let i = 0; i < files.length; i++) {
